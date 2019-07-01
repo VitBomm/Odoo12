@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Start of Bill-->
+
+    <record id="form_bill_view" model="ir.ui.view">
+        <field name="name">bill.form</field>
+        <field name="model">hhd.cost.recovery.category</field>
+        <field name="arch" type="xml">
+            <form string="Bill Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="tien_bill"/>
+                            <field name="cost_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bill_tree_view" model="ir.ui.view">
+        <field name="name">bill.tree</field>
+        <field name="model">hhd.cost.recovery.category</field>
+        <field name="arch" type="xml">
+            <tree string="Bill Tree">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="tien_bill"/>
+                <field name="date_start"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="bill_list_action" model="ir.actions.act_window">
+        <field name="name">Bill</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hhd.cost.recovery.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <!-- Add Text Here -->
+            <p class="o_view_nocontent_smiling_face">Create the first Bill</p>
+            <!-- More details about what a user can do with this object will be OK -->
+        </field>
+    </record>
+
+    <record id="bill_search_view" model="ir.ui.view">
+       <field name="name">hhd.cost.recovery.search</field>
+       <field name="model">hhd.cost.recovery.category</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+            </search>
+       </field>
+    </record>
+
+
+
+    <menuitem id="bill_root" name="Hoá Đơn"/>
+    <!-- This Menu Item Must have a parent -->
+    <menuitem id="bill_menu" name="Hoá Đơn và Chi Phí" parent="bill_root"/>
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="bill_action" name="Hoá Đơn" parent="bill_menu" action="bill_list_action"/>
+
+
+
+    <!-- End of Bill-->
+
+    <!--**************************************************************-->
+
+    <!--start of Cost-->
+
+    <record id="form_cost_view" model="ir.ui.view">
+        <field name="name">cost.form</field>
+        <field name="model">hhd.cost.recovery</field>
+        <field name="arch" type="xml">
+            <form string="Cost Form">
+                <header>
+                    <button name="submit_request" string="Submit" class="oe_highlight" states="draft" type="object"/>
+                    <button name="approve_request" string="Approve" class="oe_highlight" states="submit" type="object" groups="hr.group_hr_user"/>
+                    <button name="done_request" string="Done" class="oe_highlight" states="approve" type="object" groups="hr.group_hr_manager"/>
+                    <button name="%(launch_session_wizard)d" string="Cancel" class="oe_highlight" states="approve,done" type="action" groups="hr.group_hr_manager"/>
+                    <field name="state" widget ="statusbar" statusbar_visible="draft,submit,approve,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="user_id"/>
+                            <field name="date_start"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="duration"/>
+                            <field name="manager_id"/>
+                            <field name="note_field"/>
+                            <field name="expired"/>
+                        </group>
+                    </group>
+                            <notebook>
+                                <group>
+                                    <field name="bill_ids">
+                                        <tree string="Register Bill">
+                                            <field name="name"/>
+                                            <field name="date_start"/>
+                                            <field name="user_id"/>
+                                            <field name="tien_bill"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Check expired -->
+   <record id="ir_cron_expired_action" model="ir.cron">
+       <field name="name">Expired</field>
+       <field name="user_id" ref="base.user_root"/>
+       <field name="model_id" ref="model_hhd_cost_recovery"/>
+       <field name="state">code</field>
+       <field name="code">model._is_expired()</field>
+       <!-- for item in env['hhd.cost.recovery'].search([]): -->
+       <field name="interval_number">1</field>
+       <field name="interval_type">minutes</field>
+       <!-- <field name="activity_user_type">specific</field> -->
+       <field name="numbercall">-1</field>
+       <field name="doall" eval="False"></field>
+    </record>
+     <!-- End Check expired -->
+
+
+    <record id="tree_cost_view" model="ir.ui.view">
+        <field name="name">cost.tree</field>
+        <field name="model">hhd.cost.recovery</field>
+        <field name="arch" type="xml">
+            <tree string="Cost Tree">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="partner_id"/>
+                <field name="tongtien"/>
+                <field name="date_start"/>
+                <field name="end_date"/>
+                <field name="expired"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="cost_calendar_view">
+        <field name="name">hhd.cost.recovery..calendar</field>
+        <field name="model">hhd.cost.recovery</field>
+        <field name="arch" type="xml">
+            <calendar string="Cost Calendar" date_start="date_start" date_stop="end_date" color="user_id">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="cost_graph_view">
+        <field name="name">hhd.cost.recovery.graph</field>
+        <field name="model">hhd.cost.recovery</field>
+        <field name="arch" type="xml">
+            <graph string="Số tiền của chi phí">
+                <field name="user_id"/>
+                <field name="tongtien" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="cost_kanban_view" model="ir.ui.view">
+         <field name="name">hhd.cost.recovery.kanban</field>
+          <field name="model">hhd.cost.recovery</field>
+         <field name="arch" type="xml">
+            <kanban default_group_by="user_id">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div
+                                    t-attf-class="oe_kanban_color_{{kanban_getcolor(record.user_id.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div class="oe_dropdown_kanban">
+                                    <!-- dropdown menu -->
+                                    <div class="oe_dropdown_toggle">
+                                        <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
+                                        <ul class="oe_dropdown_menu">
+                                            <li>
+                                                <a type="delete">Delete</a>
+                                            </li>
+                                            <li>
+                                                <ul class="oe_kanban_colorpicker"
+                                                    data-field="color"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="oe_clear"></div>
+                                </div>
+                                <div t-attf-class="oe_kanban_content">
+                                    <!-- title -->
+                                    Chi Phí:
+                                    <field name="name"/>
+                                    <br/>
+                                    Ngày Bắt Đầu :
+                                    <field name="date_start"/>
+                                    <br/>
+                                    Tổng Tiền :
+                                    <field name="tongtien"/>
+                                    <br/>
+                                    Đối tác :
+                                    <field name="partner_id"/>
+                                    <field name="user_id" attrs="{'invisible' : 1 }"/>
+                                </div>
+                            </div>
+                    </t>
+                </templates>
+            </kanban>
+         </field>
+    </record>
+
+    <record id="cost_search_view" model="ir.ui.view">
+        <field name="name">hhd.cost.recovery.search</field>
+        <field name="model">hhd.cost.recovery</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="partner_id"/>
+                <filter string="Tháng Trước" name="thangtruoc_filter"
+                domain="['&#38;',('date_start','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01'))
+                ,('date_start','&lt;',(context_today().strftime('%%Y-%%m-01')))
+                ]" />
+                <filter string="Tháng Này" name="thangnay_filter"
+                domain="['&#38;',('date_start','&gt;=',(context_today().strftime('%%Y-%%m-01'))),
+                ('date_start','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))
+                ]"/>
+                <filter string="Tuần Trước" name="tuantruoc_filter" domain="['&#38;',('date_start', '&gt;=', ((context_today()+relativedelta(weeks=-2,days=1, weekday=0)).strftime('%%Y-%%m-%%d'))),
+                ('date_start', '&lt;=', ((context_today()+relativedelta(weeks=-1,weekday=6)).strftime('%%Y-%%m-%%d')))]"/>
+                <filter string="Tuần Này" name="tuannay_filter" domain="['&#38;',('date_start', '&gt;=', ((context_today()+relativedelta(weekday=0)).strftime('%%Y-%%m-%%d'))),
+                ('date_start', '&lt;=', ((context_today()+relativedelta(weekday=6)).strftime('%%Y-%%m-%%d')))]"/>
+                <group string="Group by">
+                    <filter name="user_id" string="Nhân Viên" context="{'group_by':'user_id'}"/>
+                    <filter name="partner_id" string="Đối tác" context="{'group_by':'partner_id'}"/>
+                    <filter name="date_start" string="Nhóm Theo" context="{'group_by':'end_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+
+    <record id="cost_list_action" model="ir.actions.act_window">
+        <field name="name">Cost</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hhd.cost.recovery</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,graph,kanban</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Create First Cost</p>
+        </field>
+    </record>
+        <record id="view_cost_wizard" model="ir.ui.view">
+        <field name="name">hhd.cost.recovery.wizard.form</field>
+        <field name="model">hhd.cost.recovery.wizard</field>
+        <field name="view_type">form</field>
+        <field name="arch" type="xml">
+            <form string="Add Note">
+                <group>
+                    <field name="cost_id"/>
+                    <field name="field_note"/>
+                </group>
+                <footer>
+                 <button name="change_field" string="Yes" type="object" class="oe_highlight"/>
+                 or
+                 <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="launch_session_wizard"
+                name="Add Note"
+                src_model="hhd.cost.recovery"
+                res_model="hhd.cost.recovery.wizard"
+                view_mode="form,tree"
+                target="new"
+    />
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="cost_action" name="Chi Phí" parent="bill_menu" action="cost_list_action"/>
+    <!--end of Cost-->
+
+
+
+
+    <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+
+</odoo>

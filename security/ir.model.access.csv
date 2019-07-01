@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hhd_cost_recovery_hhd_cost_recovery,hhd_cost_recovery.hhd_cost_recovery,model_hhd_cost_recovery,,1,1,1,1
+access_hhd_cost_recovery_hhd_cost_recovery_category,hhd_cost_recovery_category.hhd_cost_recovery_category,model_hhd_cost_recovery_category,,1,1,1,1
