@@ -26,11 +26,11 @@
     <template id="cost_recap_report_view">
         <t t-call="web.html_container">
             <div class="header" style="border-bottom: 2px solid black">
-                <h3 class="text-center">Cost Report</h3>
+                <h3 class="text-center">Báo Cáo</h3>
                 <h4 class="text-center">
-                    <strong>From</strong>:
+                    <strong>Từ Ngày</strong>:
                     <t t-esc="date_from"/>
-                    <strong>To</strong>:
+                    <strong>Tới Ngày</strong>:
                     <t t-esc="date_end"/>
                 </h4>
             </div>

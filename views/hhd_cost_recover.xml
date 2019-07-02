@@ -158,7 +158,7 @@
     </record>
 
     <record model="ir.ui.view" id="cost_calendar_view">
-        <field name="name">hhd.cost.recovery..calendar</field>
+        <field name="name">hhd.cost.recovery.calendar</field>
         <field name="model">hhd.cost.recovery</field>
         <field name="arch" type="xml">
             <calendar string="Cost Calendar" date_start="date_start" date_stop="end_date" color="user_id">

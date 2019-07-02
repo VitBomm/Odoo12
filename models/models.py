@@ -20,6 +20,10 @@ class Bill(models.Model):
             'name must be unique',
         )
     ]
+    # @api.constrains('date_start'):
+    # def check_date_validate(self):
+    #     if self.cost_id.date_start < self.date_start:
+
 
 class Cost(models.Model):
     _name = 'hhd.cost.recovery'
