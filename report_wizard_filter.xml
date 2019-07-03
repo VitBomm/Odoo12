@@ -17,30 +17,14 @@
                     </group>
                 </group>
                     <footer>
-                        <button name="get_report" string="In Báo Cáo" type="object" class="oe_highlight"/>
+                        <button name="get_report" context="{'report_type': 'pdf'}" string="In PDF" type="object" class="oe_highlight"/>
+                        <button name="get_report_xlsx" context="{'report_type': 'xlsx'}" string="In Excel" type="object" class="oe_highlight"/>
                         <button string="Cancel" special="cancel"/>
                     </footer>
             </form>
         </field>
     </record>
-<!-- 
-    <record model="ir.ui.view" id="hhd_cost_recovery_report_id_wizard">
-        <field name="name">Report Cost with ID <field/>
-        <field name="model">hhd.cost.recovery.report.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Lọc Theo Điều kiện">
-                <group>
-                    <field name="user_id">
-                    <field name="partner_id">
-                    <field name="state">
-                </group>
-                <footer>
-                    <button name="get_reportid" string="In Báo Cáo" type="object" class="oe_highlight"/>
-                    <button string="Cancel" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record> -->
+
 <act_window id="action_hhd_cost_recovery_report_wizard" 
             name="Cost Report"
             res_model="hhd.cost.recovery.report.wizard"
@@ -48,17 +32,8 @@
             target="new"
 />
 
-<!-- <act_window id="action_hhd_cost_recovery_report_id_wizard" 
-            name="Cost Report"
-            res_model="hhd.cost.recovery.report.wizard"
-            view_mode="form"
-            target="new"
-/> -->
-
 <menuitem action="action_hhd_cost_recovery_report_wizard" 
             id="menu_cost_report"
             parent="bill_root"
 />
-<!-- <menuitem id="menu_cost_reportid" parent="menu_cost_report" action="action_hhd_cost_recovery_report_id_wizard">
- -->
 </odoo>

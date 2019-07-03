@@ -8,8 +8,8 @@ class Bill(models.Model):
     _description = 'Hoá Đơn'
 
     name = fields.Char(string='Tên Hoá Đơn')
-    cost_id = fields.Many2one('hhd.cost.recovery', ondelete='cascade', string="Cost", required=True)
-    date_start = fields.Date(default=fields.Date.today)
+    cost_id = fields.Many2one('hhd.cost.recovery', ondelete='cascade', string="Chi Phí", required=True)
+    date_start = fields.Date(string='Ngày Làm Hoá Đơn',default=fields.Date.today)
     user_id = fields.Many2one('res.users', on_delete='set null',default=lambda self: self.env.user,string="Nhân Viên", index=True)
     tien_bill = fields.Float('Giá Tiền', digits=(7, 2))
 
@@ -33,15 +33,15 @@ class Cost(models.Model):
     tongtien = fields.Float(String='Tổng Tiền', digits=(10,2), compute="_all_money", store=True)
     description = fields.Text(string='Mô Tả')
     note_field = fields.Text(string='Ghi Chú')
-    bill_ids = fields.One2many('hhd.cost.recovery.category', 'cost_id', string="Bill")
+    bill_ids = fields.One2many('hhd.cost.recovery.category', 'cost_id', string="Hoá Đơn")
     user_id = fields.Many2one('res.users', ondelete='set null', default=lambda self: self.env.user, string='Nhân Viên', index=True)
     manager_id = fields.Many2one('res.users', ondelete='set null', string='Quản lý', index=True)
     partner_id = fields.Many2one('res.partner',ondelete='set null' ,string='Đối Tác', index=True)
-    date_start = fields.Date(default=fields.Date.today)
-    duration = fields.Float(digits=(6, 2),help="Duration in days")
-    end_date = fields.Date(string="End Date", store=True, compute="_get_end_date", inverse="_set_end_date")
-    expired = fields.Char(String='Hết Hạn', store=True, compute="_is_expired")
-    state = fields.Selection(String='Status', selection=[('draft', 'Draft'), ('submit', 'Submit')
+    date_start = fields.Date(string ="Ngày Lập Phiếu",default=fields.Date.today)
+    duration = fields.Float(string="Số Ngày Cần Hoàn Tiền",digits=(6, 2),help="Duration in days")
+    end_date = fields.Date(string="Ngày Hết Hạn", store=True, compute="_get_end_date", inverse="_set_end_date")
+    expired = fields.Char(string='Hết Hạn', store=True, compute="_is_expired")
+    state = fields.Selection(string='Tình Trạng', selection=[('draft', 'Draft'), ('submit', 'Submit')
         ,  ('approve', 'Approve'), ('done', 'Done'), ('cancel', 'Cancel')], default="draft", track_visibility='onchange')
 
 
@@ -100,18 +100,27 @@ class Cost(models.Model):
         print("****************")
         for r in self.search([]):
             print('++++++++++++++++++')
-            if r.end_date < (date.today() + timedelta(1)):
-                print("****************")
-                r.expired = 'Expired'
+            if r.state != 'done':
+                if r.end_date < (date.today() + timedelta(1)):
+                    print("****************")
+                    r.expired = 'Hết Hạn'
+                else:
+                    print("-----------------")
+                    print('Còn '+ str((r.end_date - date.today() + timedelta(1)).days) + ' ngày nữa hết hạn')
+                    r.expired = 'Còn '+ str((r.end_date - date.today() + timedelta(1)).days) + ' ngày nữa hết hạn'
             else:
-                print("-----------------")
-                print('Còn '+ str((r.end_date - date.today() + timedelta(1)).days) + ' ngày nữa hết hạn')
-                r.expired = 'Còn '+ str((r.end_date - date.today() + timedelta(1)).days) + ' ngày nữa hết hạn'
+                r.expired = 'Đã Thanh Toán'
+    @api.depends('state')
+    def _check_done(self):
+        for r in self:
+            if r.state == 'done':
+                r.expired = 'Đã Thanh Toán'
 
     @api.depends('bill_ids.tien_bill')
     def _all_money(self):
         for r in self:
             r.tongtien = sum(r.bill_ids.mapped('tien_bill'))
+
 
     _sql_constraints = [
 

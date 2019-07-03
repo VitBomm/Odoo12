@@ -236,17 +236,17 @@
                 <field name="user_id"/>
                 <field name="partner_id"/>
                 <filter string="Tháng Trước" name="thangtruoc_filter"
-                domain="['&#38;',('date_start','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01'))
-                ,('date_start','&lt;',(context_today().strftime('%%Y-%%m-01')))
+                domain="['&#38;',('date_start','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01'))
+                ,('date_start','&lt;',(context_today().strftime('%Y-%m-01')))
                 ]" />
                 <filter string="Tháng Này" name="thangnay_filter"
-                domain="['&#38;',('date_start','&gt;=',(context_today().strftime('%%Y-%%m-01'))),
-                ('date_start','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))
+                domain="['&#38;',('date_start','&gt;=',(context_today().strftime('%Y-%m-01'))),
+                ('date_start','&lt;',(context_today()+relativedelta(months=1)).strftime('%Y-%m-01'))
                 ]"/>
-                <filter string="Tuần Trước" name="tuantruoc_filter" domain="['&#38;',('date_start', '&gt;=', ((context_today()+relativedelta(weeks=-2,days=1, weekday=0)).strftime('%%Y-%%m-%%d'))),
-                ('date_start', '&lt;=', ((context_today()+relativedelta(weeks=-1,weekday=6)).strftime('%%Y-%%m-%%d')))]"/>
-                <filter string="Tuần Này" name="tuannay_filter" domain="['&#38;',('date_start', '&gt;=', ((context_today()+relativedelta(weekday=0)).strftime('%%Y-%%m-%%d'))),
-                ('date_start', '&lt;=', ((context_today()+relativedelta(weekday=6)).strftime('%%Y-%%m-%%d')))]"/>
+                <filter string="Tuần Trước" name="tuantruoc_filter" domain="['&#38;',('date_start', '&gt;=', ((context_today()+relativedelta(weeks=-2,days=1, weekday=0)).strftime('%Y-%m-%d'))),
+                ('date_start', '&lt;=', ((context_today()+relativedelta(weeks=-1,weekday=6)).strftime('%Y-%m-%d')))]"/>
+                <filter string="Tuần Này" name="tuannay_filter" domain="['&#38;',('date_start', '&lt;=', ((context_today()+relativedelta(weekday=6)).strftime('%Y-%m-%d'))),
+                ('date_start', '&gt;=', ((context_today()-relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d')))]"/>
                 <group string="Group by">
                     <filter name="user_id" string="Nhân Viên" context="{'group_by':'user_id'}"/>
                     <filter name="partner_id" string="Đối tác" context="{'group_by':'partner_id'}"/>

@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, exceptions
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
 
@@ -15,7 +15,7 @@ class ReportWizard(models.TransientModel):
     @api.constrains('date_from','date_end')
     def checkdate(self):
         if self.date_from and self.date_end and ( self.date_from > self.date_end):
-            raise ValidationError(_("Ngày kết thúc không thêr bé hơn ngày bắt đầu"))
+            raise exceptions.ValidationError('Ngày Kết Thúc Không Thể Ngắn Hơn Ngày Bắt Đầu')
 
 
     @api.multi
@@ -32,11 +32,27 @@ class ReportWizard(models.TransientModel):
                 'state' : self.state,
             },
         }
-        return self.env.ref('hhd_cost_recovery.recap_report').report_action(self, data=data)
+        if self.env.context.get('report_type') == 'pdf':
+            return self.env.ref('hhd_cost_recovery.recap_report').report_action(self, data=data)
+        # else:
+        #     return self.env.ref('hhd_cost_recovery.cost_xlsx').report_action(self, data=data)
 
-    # @api.multi
-    # def get_report_xlsx(self):
-
+# class ReportXLSX(models.AbstractModel):
+#     __name = 'report.hhd_cost_recovery.report_xlsx'
+#     _inherit = 'report.report_xlsx.abstract'
+#     date_from = data['form']['date_from']
+#     date_end = data['form']['date_end']
+#     user_id = int(data['form']['user_selected'])
+#     partner_id = int(data['form']['partner_selected'])
+#     state = data['form']['state']
+#     costs = self.env['hhd.cost.recovery'].search([],order='name asc')
+#     def generate_xlsx_report(self, workbook, data):
+#         for obj in partners:
+#             report_name = obj.name
+#             # One sheet by partner
+#             sheet = workbook.add_worksheet(report_name[:31])
+#             bold = workbook.add_format({'bold': True})
+#             sheet.write(0, 0, obj.name, bold)
 
 class ReportCostRecap(models.AbstractModel):
     _name = 'report.hhd_cost_recovery.cost_recap_report_view'

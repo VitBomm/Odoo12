@@ -9,8 +9,8 @@ class CostWizard(models.TransientModel):
 
 
 
-    cost_id = fields.Many2one('hhd.cost.recovery', ondelete='set null',
-        string="Chi Phí", required=True, default=default_cost)
+    cost_id = fields.Many2one('hhd.cost.recovery',
+        string="Chi Phí", default=default_cost)
     field_note = fields.Text()
     @api.multi
     def change_field(self):
