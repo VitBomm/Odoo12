@@ -1,0 +1,30 @@
+<odoo>
+    <record id="hhd_add_voice_cost" model="ir.ui.view">
+        <field name="name">hhd.add.voice.cost.form</field>
+        <field name="model">hhd.add.invoice.wizard</field>
+        <field name="arch" type="xml">
+        <form string="Chọn Nhân Viên Và Chi Phí">
+            <group>
+                <group>
+                    <field name="chiphi_id" domain="[('state','=','-1')]"/>
+                    <field name="user_id"/>
+                </group>
+                <group>
+                    <field name="customer_id"/>
+                </group>
+            </group>
+            <footer>
+                  <button name="auto_add_product" string="OK" type="object" class="oe_highlight"/>
+                 or
+                <button name="cancel" string="Cancel" class="oe_link" special="cancel"/>
+            </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="action_hhd_cost_recovery_add_invoice" 
+                name="Cost Report"
+                res_model="hhd.add.invoice.wizard"
+                view_mode="form"
+                target="new"
+    />
+</odoo>
