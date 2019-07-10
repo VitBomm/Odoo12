@@ -5,6 +5,7 @@ class CostWizard(models.TransientModel):
     _description = "Thêm Note"
 
     def default_cost(self):
+        # return self.env['hhd.cost.recovery'].search([])
         return self.env['hhd.cost.recovery'].browse(self._context.get('note_field'))
 
 

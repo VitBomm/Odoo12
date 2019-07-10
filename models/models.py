@@ -8,9 +8,9 @@ class Bill(models.Model):
     _description = 'Hoá Đơn'
 
     name = fields.Char(string='Tên Hoá Đơn')
-    cost_id = fields.Many2one('hhd.cost.recovery', ondelete='cascade', string="Chi Phí", required=True)
+    cost_id = fields.Many2one(comodel_name='hhd.cost.recovery', ondelete='cascade', string="Chi Phí", required=True)
     date_start = fields.Date(string='Ngày Làm Hoá Đơn',default=fields.Date.today)
-    user_id = fields.Many2one('res.users', on_delete='set null',default=lambda self: self.env.user,string="Nhân Viên", index=True)
+    user_id = fields.Many2one(comodel_name='res.users', on_delete='set null',default=lambda self: self.env.user,string="Nhân Viên", index=True)
     tien_bill = fields.Float('Giá Tiền', digits=(7, 2))
 
     _sql_constraints = [
@@ -20,30 +20,32 @@ class Bill(models.Model):
             'name must be unique',
         )
     ]
-    # @api.constrains('date_start'):
-    # def check_date_validate(self):
-    #     if self.cost_id.date_start < self.date_start:
+    @api.constrains('date_start')
+    def check_date_validate(self):
+        if self.cost_id.date_start < self.date_start:
+            raise exceptions.ValidationError('Ngày Của Hoá Đơn Không Thể Nhỏ Hơn Ngày Của Chi Phí')
 
 
 class Cost(models.Model):
     _name = 'hhd.cost.recovery'
+    _inherit = ['mail.thread']
     _description = 'Chi Phí'
 
     name = fields.Char(String='Tên Chi Phí')
     tongtien = fields.Float(String='Tổng Tiền', digits=(10,2), compute="_all_money", store=True)
     description = fields.Text(string='Mô Tả')
     note_field = fields.Text(string='Ghi Chú')
-    bill_ids = fields.One2many('hhd.cost.recovery.category', 'cost_id', string="Hoá Đơn")
-    user_id = fields.Many2one('res.users', ondelete='set null', default=lambda self: self.env.user, string='Nhân Viên', index=True)
-    manager_id = fields.Many2one('res.users', ondelete='set null', string='Quản lý', index=True)
-    partner_id = fields.Many2one('res.partner',ondelete='set null' ,string='Đối Tác', index=True)
+    bill_ids = fields.One2many(comodel_name='hhd.cost.recovery.category',inverse_name='cost_id', string="Hoá Đơn")
+    user_id = fields.Many2one(comodel_name='res.users', ondelete='set null', default=lambda self: self.env.user, string='Nhân Viên', index=True)
+    manager_id = fields.Many2one(comodel_name='res.users', ondelete='set null', string='Quản lý', index=True)
+    partner_id = fields.Many2one(comodel_name='res.partner',ondelete='set null' ,string='Đối Tác', index=True)
     date_start = fields.Date(string ="Ngày Lập Phiếu",default=fields.Date.today)
     duration = fields.Float(string="Số Ngày Cần Hoàn Tiền",digits=(6, 2),help="Duration in days")
     end_date = fields.Date(string="Ngày Hết Hạn", store=True, compute="_get_end_date", inverse="_set_end_date")
     expired = fields.Char(string='Hết Hạn', store=True, compute="_is_expired")
     state = fields.Selection(string='Tình Trạng', selection=[('draft', 'Draft'), ('submit', 'Submit')
         ,  ('approve', 'Approve'), ('done', 'Done'), ('cancel', 'Cancel')], default="draft", track_visibility='onchange')
-
+    invoice = fields.Many2one(comodel_name='account.invoice',ondelete='cascade' ,string='Hoá Đơn Cần Thanh Toán', index=True)
 
     @api.multi
     def submit_request(self):

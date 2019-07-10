@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
+        <act_window id="launch_session_wizard"
+                name="Add Note"
+                src_model="hhd.cost.recovery"
+                res_model="hhd.cost.recovery.wizard"
+                view_mode="form,tree"
+                target="new"
+    />
     <!-- Start of Bill-->
 
     <record id="form_bill_view" model="ir.ui.view">
@@ -40,7 +46,7 @@
 
 
     <record id="bill_list_action" model="ir.actions.act_window">
-        <field name="name">Bill</field>
+        <field name="name">Hoá Đơn</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hhd.cost.recovery.category</field>
         <field name="view_type">form</field>
@@ -65,12 +71,6 @@
 
 
 
-    <menuitem id="bill_root" name="Hoá Đơn"/>
-    <!-- This Menu Item Must have a parent -->
-    <menuitem id="bill_menu" name="Hoá Đơn và Chi Phí" parent="bill_root"/>
-    <!-- This Menu Item must have a parent and an action -->
-    <menuitem id="bill_action" name="Hoá Đơn" parent="bill_menu" action="bill_list_action"/>
-
 
 
     <!-- End of Bill-->
@@ -78,6 +78,7 @@
     <!--**************************************************************-->
 
     <!--start of Cost-->
+
 
     <record id="form_cost_view" model="ir.ui.view">
         <field name="name">cost.form</field>
@@ -87,8 +88,8 @@
                 <header>
                     <button name="submit_request" string="Submit" class="oe_highlight" states="draft" type="object"/>
                     <button name="approve_request" string="Approve" class="oe_highlight" states="submit" type="object" groups="hr.group_hr_user"/>
-                    <button name="done_request" string="Done" class="oe_highlight" states="approve" type="object" groups="hr.group_hr_manager"/>
-                    <button name="%(launch_session_wizard)d" string="Cancel" class="oe_highlight" states="approve,done" type="action" groups="hr.group_hr_manager"/>
+                    <!-- <button name="done_request" string="Done" class="oe_highlight" states="approve" type="object" groups="hr.group_hr_manager"/> -->
+                    <button name="%(launch_session_wizard)d" string="Cancel" class="oe_highlight" states="approve" type="action" groups="hr.group_hr_manager"/>
                     <field name="state" widget ="statusbar" statusbar_visible="draft,submit,approve,done"/>
                 </header>
                 <sheet>
@@ -98,12 +99,13 @@
                             <field name="description"/>
                             <field name="user_id"/>
                             <field name="date_start"/>
+                            <field name="note_field"/>
                         </group>
                         <group>
                             <field name="partner_id"/>
                             <field name="duration"/>
                             <field name="manager_id"/>
-                            <field name="note_field"/>
+                            <field name="tongtien" readonly="True"/>
                             <field name="expired"/>
                         </group>
                     </group>
@@ -120,6 +122,10 @@
                                 </group>
                             </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -152,6 +158,7 @@
                 <field name="tongtien"/>
                 <field name="date_start"/>
                 <field name="end_date"/>
+                <field name="state"/>
                 <field name="expired"/>
             </tree>
         </field>
@@ -250,7 +257,9 @@
                 <group string="Group by">
                     <filter name="user_id" string="Nhân Viên" context="{'group_by':'user_id'}"/>
                     <filter name="partner_id" string="Đối tác" context="{'group_by':'partner_id'}"/>
+                    <filter name="state" string="Nhóm Theo" context="{'group_by':'state'}"/>
                     <filter name="date_start" string="Nhóm Theo" context="{'group_by':'end_date'}"/>
+
                 </group>
             </search>
         </field>
@@ -259,7 +268,7 @@
 
 
     <record id="cost_list_action" model="ir.actions.act_window">
-        <field name="name">Cost</field>
+        <field name="name">Chi Phí</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hhd.cost.recovery</field>
         <field name="view_type">form</field>
@@ -268,7 +277,7 @@
           <p class="o_view_nocontent_smiling_face">Create First Cost</p>
         </field>
     </record>
-        <record id="view_cost_wizard" model="ir.ui.view">
+    <record id="view_cost_wizard" model="ir.ui.view">
         <field name="name">hhd.cost.recovery.wizard.form</field>
         <field name="model">hhd.cost.recovery.wizard</field>
         <field name="view_type">form</field>
@@ -287,17 +296,19 @@
         </field>
     </record>
 
-    <act_window id="launch_session_wizard"
-                name="Add Note"
-                src_model="hhd.cost.recovery"
-                res_model="hhd.cost.recovery.wizard"
-                view_mode="form,tree"
-                target="new"
-    />
+   
+
 
     <!-- This Menu Item must have a parent and an action -->
-    <menuitem id="cost_action" name="Chi Phí" parent="bill_menu" action="cost_list_action"/>
     <!--end of Cost-->
+
+    <menuitem id="bill_root" name="Chi Phí"/>
+    <!-- This Menu Item Must have a parent -->
+    <menuitem id="bill_menu" name="Hoá Đơn và Chi Phí" parent="bill_root"/>
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="bill_action" name="Hoá Đơn" parent="bill_menu" action="bill_list_action"/>
+    <menuitem id="cost_action" name="Chi Phí" parent="bill_menu" action="cost_list_action"/>
+
 
 
 
