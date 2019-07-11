@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-        <act_window id="launch_session_wizard"
+    <act_window id="launch_session_wizard"
                 name="Add Note"
                 src_model="hhd.cost.recovery"
                 res_model="hhd.cost.recovery.wizard"
@@ -8,7 +8,6 @@
                 target="new"
     />
     <!-- Start of Bill-->
-
     <record id="form_bill_view" model="ir.ui.view">
         <field name="name">bill.form</field>
         <field name="model">hhd.cost.recovery.category</field>
@@ -44,7 +43,6 @@
         </field>
     </record>
 
-
     <record id="bill_list_action" model="ir.actions.act_window">
         <field name="name">Hoá Đơn</field>
         <field name="type">ir.actions.act_window</field>
@@ -52,9 +50,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
-            <!-- Add Text Here -->
             <p class="o_view_nocontent_smiling_face">Create the first Bill</p>
-            <!-- More details about what a user can do with this object will be OK -->
         </field>
     </record>
 
@@ -68,18 +64,9 @@
             </search>
        </field>
     </record>
-
-
-
-
-
     <!-- End of Bill-->
-
     <!--**************************************************************-->
-
     <!--start of Cost-->
-
-
     <record id="form_cost_view" model="ir.ui.view">
         <field name="name">cost.form</field>
         <field name="model">hhd.cost.recovery</field>
@@ -109,18 +96,18 @@
                             <field name="expired"/>
                         </group>
                     </group>
-                            <notebook>
-                                <group>
-                                    <field name="bill_ids">
-                                        <tree string="Register Bill">
-                                            <field name="name"/>
-                                            <field name="date_start"/>
-                                            <field name="user_id"/>
-                                            <field name="tien_bill"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                            </notebook>
+                        <notebook>
+                            <group>
+                                <field name="bill_ids">
+                                    <tree string="Register Bill">
+                                        <field name="name"/>
+                                        <field name="date_start"/>
+                                        <field name="user_id"/>
+                                        <field name="tien_bill"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
@@ -145,7 +132,6 @@
        <field name="doall" eval="False"></field>
     </record>
      <!-- End Check expired -->
-
 
     <record id="tree_cost_view" model="ir.ui.view">
         <field name="name">cost.tree</field>
@@ -197,7 +183,6 @@
                                                   oe_kanban_global_click_edit oe_semantic_html_override
                                                   oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
                                 <div class="oe_dropdown_kanban">
-                                    <!-- dropdown menu -->
                                     <div class="oe_dropdown_toggle">
                                         <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
                                         <ul class="oe_dropdown_menu">
@@ -213,21 +198,20 @@
                                     <div class="oe_clear"></div>
                                 </div>
                                 <div t-attf-class="oe_kanban_content">
-                                    <!-- title -->
-                                    Chi Phí:
-                                    <field name="name"/>
-                                    <br/>
-                                    Ngày Bắt Đầu :
-                                    <field name="date_start"/>
-                                    <br/>
-                                    Tổng Tiền :
-                                    <field name="tongtien"/>
-                                    <br/>
-                                    Đối tác :
-                                    <field name="partner_id"/>
-                                    <field name="user_id" attrs="{'invisible' : 1 }"/>
-                                </div>
+                                Chi Phí:
+                                <field name="name"/>
+                                <br/>
+                                Ngày Bắt Đầu :
+                                <field name="date_start"/>
+                                <br/>
+                                Tổng Tiền :
+                                <field name="tongtien"/>
+                                <br/>
+                                Đối tác :
+                                <field name="partner_id"/>
+                                <field name="user_id" attrs="{'invisible' : 1 }"/>
                             </div>
+                        </div>
                     </t>
                 </templates>
             </kanban>
@@ -265,8 +249,6 @@
         </field>
     </record>
 
-
-
     <record id="cost_list_action" model="ir.actions.act_window">
         <field name="name">Chi Phí</field>
         <field name="type">ir.actions.act_window</field>
@@ -277,6 +259,7 @@
           <p class="o_view_nocontent_smiling_face">Create First Cost</p>
         </field>
     </record>
+
     <record id="view_cost_wizard" model="ir.ui.view">
         <field name="name">hhd.cost.recovery.wizard.form</field>
         <field name="model">hhd.cost.recovery.wizard</field>
@@ -295,24 +278,9 @@
             </form>
         </field>
     </record>
-
-   
-
-
-    <!-- This Menu Item must have a parent and an action -->
     <!--end of Cost-->
-
     <menuitem id="bill_root" name="Chi Phí"/>
-    <!-- This Menu Item Must have a parent -->
     <menuitem id="bill_menu" name="Hoá Đơn và Chi Phí" parent="bill_root"/>
-    <!-- This Menu Item must have a parent and an action -->
     <menuitem id="bill_action" name="Hoá Đơn" parent="bill_menu" action="bill_list_action"/>
     <menuitem id="cost_action" name="Chi Phí" parent="bill_menu" action="cost_list_action"/>
-
-
-
-
-
-    <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
-
 </odoo>

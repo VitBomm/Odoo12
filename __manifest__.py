@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail','account','contacts'],
+    'depends': ['base', 'mail', 'account', 'contacts'],
 
     # always loaded
     'data': [
@@ -28,9 +28,9 @@
         'views/views.xml',
         'views/templates.xml',
         'views/hhd_cost_recover.xml',
-        'views/report_wizard_filter.xml',
-        'views/report_template.xml',
-        'views/hhd_wizard_add_invoice_view.xml',
+        'report/report_wizard_view_template.xml',
+        'report/report_wizard_view.xml',
+        'wizard/hhd_wizard_add_invoice_view.xml',
         'views/account_invoice_cost_view.xml',
         'views/mail_template.xml',
         # 'security/security.xml',

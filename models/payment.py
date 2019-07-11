@@ -12,9 +12,5 @@ class Payment_Inherit(models.Model):
             r.state = 'done'
         if res:
             template = self.env.ref('hhd_cost_recovery.example_email_template')
-            # You can also find the e-mail template like this:
-            # template = self.env['ir.model.data'].get_object('mail_template_demo', 'example_email_template')
-    
-            # Send out the e-mail template to the user
             self.env['mail.template'].browse(template.id).send_mail(self.id)
         return res

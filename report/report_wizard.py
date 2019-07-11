@@ -7,16 +7,15 @@ class ReportWizard(models.TransientModel):
     _name='hhd.cost.recovery.report.wizard'
     _description='Report theo điều kiện'
 
-    date_from = fields.Date(string="Start Date",required=True, default=fields.Date.today)
+    date_from = fields.Date(string="Start Date", required=True, default=fields.Date.today)
     date_end = fields.Date(string="End Date", required =True, default=fields.Date.today)
     user_id = fields.Many2one('res.users', ondelete='set null', string='Nhân Viên', index=True)
-    partner_id = fields.Many2one('res.partner',on_delete="set null", string="Đối Tác", index=True)
-    state = fields.Selection(String='Status', selection=[('draft', 'Draft'), ('submit', 'Submit'), ('approve', 'Approve'), ('done', 'Done')], default="done")
+    partner_id = fields.Many2one('res.partner', on_delete="set null", string="Đối Tác", index=True)
+    state = fields.Selection(String='Status', selection=[('draft', 'Draft'), ('submit', 'Submit'), ('approve', 'Approve'), ('done', 'Done')], default = "done")
     @api.constrains('date_from','date_end')
     def checkdate(self):
-        if self.date_from and self.date_end and ( self.date_from > self.date_end):
+        if self.date_from and self.date_end and (self.date_from > self.date_end):
             raise exceptions.ValidationError('Ngày Kết Thúc Không Thể Ngắn Hơn Ngày Bắt Đầu')
-
 
     @api.multi
     def get_report(self):
@@ -37,36 +36,18 @@ class ReportWizard(models.TransientModel):
         # else:
         #     return self.env.ref('hhd_cost_recovery.cost_xlsx').report_action(self, data=data)
 
-# class ReportXLSX(models.AbstractModel):
-#     __name = 'report.hhd_cost_recovery.report_xlsx'
-#     _inherit = 'report.report_xlsx.abstract'
-#     date_from = data['form']['date_from']
-#     date_end = data['form']['date_end']
-#     user_id = int(data['form']['user_selected'])
-#     partner_id = int(data['form']['partner_selected'])
-#     state = data['form']['state']
-#     costs = self.env['hhd.cost.recovery'].search([],order='name asc')
-#     def generate_xlsx_report(self, workbook, data):
-#         for obj in partners:
-#             report_name = obj.name
-#             # One sheet by partner
-#             sheet = workbook.add_worksheet(report_name[:31])
-#             bold = workbook.add_format({'bold': True})
-#             sheet.write(0, 0, obj.name, bold)
-
 class ReportCostRecap(models.AbstractModel):
     _name = 'report.hhd_cost_recovery.cost_recap_report_view'
 
-
-    def docs_add(self ,docs, temp):
-        docs.append(
-        {
+    def docs_add(self, docs, temp):
+        docs.append({
            'cost_name': temp.name,
             'tongtien': temp.tongtien,
             'user_id' : temp.user_id.name,
             'expired': temp.expired,
             'partner_id': temp.partner_id.name,
         })
+
     @api.model
     def _get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
@@ -78,7 +59,7 @@ class ReportCostRecap(models.AbstractModel):
         date_end_obj = datetime.strptime(date_end, DATE_FORMAT)
         
         docs = []
-        costs = self.env['hhd.cost.recovery'].search([],order='name asc')
+        costs = self.env['hhd.cost.recovery'].search([], order='name asc')
         for cost in costs:
             if cost.date_start >= date_from_obj.date() and cost.end_date <= date_end_obj.date():
                 if state == False and partner_id == 0 == user_id:
@@ -105,8 +86,6 @@ class ReportCostRecap(models.AbstractModel):
                     if cost.user_id.id == user_id and cost.state == state and cost.partner_id.id == partner_id:
                         self.docs_add(docs, cost)
 
-    
-        print(docs)
         return dict({
             'doc_ids': data['ids'],
             'doc_model': data['model'],

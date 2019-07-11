@@ -4,9 +4,9 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
-             <xpath expr="//field[@name='user_id']" position="after">
-             <field name="cost_id" invisible="1"/>
-             </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="cost_id" invisible="1"/>
+            </xpath>
             <xpath expr="//button[@name='preview_invoice']" position="after">
                 <button string="Tạo Hoá Đơn" type="action" name="%(action_hhd_cost_recovery_add_invoice)d"  />
             </xpath>

@@ -25,15 +25,15 @@
         </field>
     </record>
 
-<act_window id="action_hhd_cost_recovery_report_wizard" 
+    <act_window id="action_hhd_cost_recovery_report_wizard" 
             name="Cost Report"
             res_model="hhd.cost.recovery.report.wizard"
             view_mode="form"
             target="new"
-/>
+    />
 
-<menuitem action="action_hhd_cost_recovery_report_wizard" 
+    <menuitem action="action_hhd_cost_recovery_report_wizard" 
             id="menu_cost_report"
             parent="bill_root"
-/>
+    />
 </odoo>
