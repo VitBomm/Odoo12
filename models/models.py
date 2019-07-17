@@ -64,10 +64,6 @@ class Cost(models.Model):
 
         self.state = 'draft'
 
-    # @api.multi
-    # def draft_request(self):
-    #     self.state = 'draft'
-
     @api.onchange('manager_id')
     def _default_manager(self):
         if not self.manager_id:
