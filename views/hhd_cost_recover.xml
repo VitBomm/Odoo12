@@ -124,10 +124,8 @@
        <field name="model_id" ref="model_hhd_cost_recovery"/>
        <field name="state">code</field>
        <field name="code">model._is_expired()</field>
-       <!-- for item in env['hhd.cost.recovery'].search([]): -->
        <field name="interval_number">1</field>
        <field name="interval_type">minutes</field>
-       <!-- <field name="activity_user_type">specific</field> -->
        <field name="numbercall">-1</field>
        <field name="doall" eval="False"></field>
     </record>
