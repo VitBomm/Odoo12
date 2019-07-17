@@ -12,6 +12,7 @@ class ReportWizard(models.TransientModel):
     user_id = fields.Many2one('res.users', ondelete='set null', string='Nhân Viên', index=True)
     partner_id = fields.Many2one('res.partner', on_delete="set null", string="Đối Tác", index=True)
     state = fields.Selection(String='Status', selection=[('draft', 'Draft'), ('submit', 'Submit'), ('approve', 'Approve'), ('done', 'Done')], default = "done")
+    
     @api.constrains('date_from','date_end')
     def checkdate(self):
         if self.date_from and self.date_end and (self.date_from > self.date_end):
