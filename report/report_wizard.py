@@ -33,8 +33,6 @@ class ReportWizard(models.TransientModel):
         }
         if self.env.context.get('report_type') == 'pdf':
             return self.env.ref('hhd_cost_recovery.recap_report').report_action(self, data=data)
-        # else:
-        #     return self.env.ref('hhd_cost_recovery.cost_xlsx').report_action(self, data=data)
 
 class ReportCostRecap(models.AbstractModel):
     _name = 'report.hhd_cost_recovery.cost_recap_report_view'
